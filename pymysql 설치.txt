@@ -1,0 +1,2 @@
+*anaconda prompt에서 실행
+pip install pymysql -> pymysql 설치

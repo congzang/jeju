@@ -1,0 +1,24 @@
+yum install mariadb-server -> mariadb 설치
+systemctl start mariadb
+systemctl status mariadb
+mysql_secure_installation
+mysql -u root -p
+->Enter키 -> password 입력 ->mariadb 접속 완료
+-------------------------------------------------------------------------------------------------------------------
+Maria DB 접속 후 아래 명령어 수행
+-------------------------------------------------------------------------------------------------------------------
+show databases; -> 존재하는 모든 db 조회
+use mysql; -> use [사용할 db명]
+grant all privileges on *.* to 'root'@'%' identified by 'acorn1234Q!' with grant option; 
+-> 모든 데이터베이스의 모든 테이블(*.*)에 대해 권한을 root에게 어디서 접근하더라도('%') 
+    root가 비밀번호 'acorn1234Q!'로 들어오면 다른 사용자에게 권한을 주는 것도 가능하다.
+
+flush privileges;
+exit; -> 마리아db 종료
+-------------------------------------------------------------------------------------------------------------------
+firewall-cmd --permanent --zone=public --add-port=3306/tcp
+firewall-cmd --reload -> 위에 내용 적용하기 위해 reload함
+firewall-cmd --list-all -> reload 후 포트 열린거 확인 (3306)
+
+systemctl restart firewalld -> 방화벽 다시 시작
+systemctl enable mariadb -> mariadb 활성화
