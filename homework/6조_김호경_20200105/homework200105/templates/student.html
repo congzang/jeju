@@ -1,0 +1,171 @@
+{% extends "base.html" %}
+{% block header %}
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>학생관리</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.structure.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.theme.min.css"/>
+    <style>
+        .event_selected {
+            background-color: red;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#btnSave').click(function () {
+                $.ajax({
+                    url: '{{url_for('studentAct')}}',
+                    type: 'post',
+                    data: $('#myForm').serialize(),
+                    success: function (res) {
+                        let data = JSON.parse(res);
+
+                        if (data.result > 0) {
+                            alert('저장 완료');
+                            location.reload();
+                        } else {
+                            alert('실패');
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+{% endblock header %}
+
+{% block explain_contents %}
+    <!-- 학생 신규 등록 -->
+    <div class="form-group">
+        <form id="myForm" name="myForm">
+            <table class="table">
+                <caption>신규 등록</caption>
+                <tr>
+                    <th>이름 :</th>
+                    <td><input type="text" id="in_sname" name="sname"></td>
+                    <th>반 :</th>
+                    <td>
+                        <select id="in_class" name="class">
+                            <option value="A">A</option>
+                            <option value="B">B</option>
+                            <option value="C">C</option>
+                        </select>
+                    </td>
+                    <th>생년월일 :</th>
+                    <td><input type="date" id="in_birth" name="birth" value="2020-01-05"></td>
+                    <th>성별 :</th>
+                    <td>
+                        <input type="radio" id="gender_m" name="gender" value="M" checked="checked"><label
+                            for="gender_m">남자</label>
+                        <input type="radio" id="gender_f" name="gender" value="F"><label for="gender_f">여자</label>
+                    </td>
+                <tr>
+                    <th>국어 :</th>
+                    <td><input type="text" id="in_kor" name="kor"></td>
+                    <th>영어 :</th>
+                    <td><input type="text" id="in_eng" name="eng"></td>
+                    <th>수학 :</th>
+                    <td><input type="text" id="in_mat" name="mat"></td>
+                    <td colspan="2">
+                        <input type="submit" value="저장" id="btnSave" class="btn btn-primary btn-lg" style="margin-right: 10px;">
+                        <input type="reset" value="초기화" class="btn btn-lg">
+                        <input type="hidden" id="sid" name="sid" value="">
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+
+    <!-- 학생 목록 -->
+    <div>
+        <table id="tb_student" class="table table-hover">
+            <caption>학생 목록</caption>
+            <thead>
+            <tr>
+                <th>학번</th>
+                <th>이름</th>
+                <th>반</th>
+                <th>생년월일</th>
+                <th>성별</th>
+                <th>국어</th>
+                <th>영어</th>
+                <th>수학</th>
+                <th>총점</th>
+                <th>평균</th>
+                <th>학점</th>
+                <th colspan="2">수정/삭제</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% if object_list == 0  %}
+                <tr>
+                    <td colspan="13" style="text-align: center;">데이터가 없습니다.</td>
+                </tr>
+            {% else %}
+                {% for student in object_list %}
+                    <tr>
+                        <td><span name="sid">{{ student[0] }}</span></td>
+                        <td><span name="sname">{{ student[1] }}</span></td>
+                        <td><span name="class">{{ student[2] }}</span></td>
+                        <td><span name="birth">{{ student[3] }}</span></td>
+                        <td><span name="gender">{{ student[4] }}</span></td>
+                        <td><span name="kor">{{ student[5] }}</span></td>
+                        <td><span name="eng">{{ student[6] }}</span></td>
+                        <td><span name="mat">{{ student[7] }}</span></td>
+                        <td><span name="total">{{ student[8] }}</span></td>
+                        <td><span name="avg">{{ student[9] }}</span></td>
+                        <td><span name="grade">{{ student[10] }}</span></td>
+
+                        <!-- 수정/삭제 버튼 -->
+                        <td>
+                            <button type="button" id="updateBtn{{ student[0] }}" name='{{ student[0] }}' class="btn btn-info">수정</button>
+                        </td>
+                        <script>
+                            $('#updateBtn{{ student[0] }}').click(function () {
+                                $('#sid').val($(this).attr("name"));
+
+                                $(this).parents("tr").find("span").each(function(i, v) {
+                                    $this = $(this);
+                                    var inputName = $this.attr("name");
+                                    $("#myForm [name='"+inputName+"']").val($this.text())
+                                });
+                            });
+                        </script>
+                        <td>
+                            <button type="button" id="deleteBtn{{ student[0] }}" title='성적' name='{{ student[0] }}' class="btn btn-danger">삭제</button>
+                        </td>
+                        <script>
+                            $('#deleteBtn{{ student[0] }}').click(function () {
+                                if (confirm($(this).attr("name") + "번 학생의 데이터를 삭제하시겠습니까?")) {
+                                    $.ajax({
+                                        url: "{{url_for('studentAct')}}",
+                                        type: 'delete',
+                                        data: { sid: $(this).attr("name") },
+                                        success: function (res) {
+                                            let data = JSON.parse(res);
+
+                                            if (data.result > 0) {
+                                                alert('삭제 완료');
+                                                location.reload();
+                                            } else {
+                                                alert('실패');
+                                            }
+                                        }
+                                    });
+                                }
+                            });
+                        </script>
+                    </tr>
+                {% endfor %}
+            {% endif %}
+            </tbody>
+        </table>
+
+    </div>
+
+{% endblock explain_contents %}
