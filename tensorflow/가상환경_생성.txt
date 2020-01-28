@@ -1,0 +1,25 @@
+* 가상환경 생성
+conda create -name tf_test python=3.7 anaconda
+conda create --name tf_test python anaconda
+가상환경 이름 : tf_test
+
+# 위에서 만든 가상환경 활성화
+activate tf_test
+
+conda update pip
+conda install numpy
+	     pandas
+	     jupyter
+	     scipy
+	     scikit-image
+	     seaborn
+	     tensorflow=1.14.0
+
+jupyter kernel install
+
+anaconda prompt에서
+tensorboard --logdir=/tmp
+결과출력
+http://localhost:6006/
+
+wndmsqkr0412@naver.com
