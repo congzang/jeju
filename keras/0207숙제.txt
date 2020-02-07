@@ -1,0 +1,5 @@
+숙제(2/9 일요일 밤까지 제출)
+
+- air.csv 데이터를 로딩한 다음
+- 회귀망을 구성하시요.
+- parameter tuning을 구현하시요.(pipeline 사용)
