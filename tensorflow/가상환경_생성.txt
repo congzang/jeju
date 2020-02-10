@@ -17,6 +17,20 @@ conda install numpy
 
 jupyter kernel install
 
+
+**************** GPU 설치 ****************
+(*기존 tensorflow 버전이 다르면 삭제 후 아래 수행)
+(*아니면 가상환경에서 새로 생성)
+conda install tensorflow==1.15.0
+conda install tensorflow-gpu==1.15.0
+
+* 확인
+tensorboard==1.15.0
+tensorflow==1.15.0
+tensorflow-estimator==1.15.1
+tensorflow-gpu==1.15.0
+******************************************
+
 anaconda prompt에서
 tensorboard --logdir=/tmp
 결과출력
