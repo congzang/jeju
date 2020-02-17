@@ -1,4 +1,4 @@
-* 가상환경 생성
+﻿* 가상환경 생성
 conda create -name tf_test python=3.7 anaconda
 conda create --name tf_test python anaconda
 가상환경 이름 : tf_test
@@ -24,11 +24,17 @@ jupyter kernel install
 conda install tensorflow==1.15.0
 conda install tensorflow-gpu==1.15.0
 
-* 확인
+* 설치 패키지 확인
 tensorboard==1.15.0
 tensorflow==1.15.0
 tensorflow-estimator==1.15.1
 tensorflow-gpu==1.15.0
+
+* GPU 사용여부 확인
+import tensorflow as tf
+from tensorflow.python.client import device_lib
+print(device_lib.list_local_devices())
+tf.test.gpu_device_name()
 ******************************************
 
 anaconda prompt에서
@@ -37,3 +43,13 @@ tensorboard --logdir=/tmp
 http://localhost:6006/
 
 wndmsqkr0412@naver.com
+
+******************************************
+* conda 업데이트 안될 때..
+conda update --force-reinstall conda
+
+* conda 명령 후 setuptools 관련 에러날 때..(ImportError 등)
+conda install -c anaconda setuptools
+
+* tensorflow 설치 후 keras 설치는 pip로..
+pip install keras
